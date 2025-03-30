@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class AddressServiceImpl implements AddressService{
+public class AddressServiceImpl implements AddressService {
     @Autowired
     private AddressRepository addressRepository;
 
@@ -35,7 +35,7 @@ public class AddressServiceImpl implements AddressService{
     }
 
     @Override
-    public List<AddressDTO> getAddresses() {
+    public List<AddressDTO> getAddress() {
         List<Address> addresses = addressRepository.findAll();
         return addresses.stream()
                 .map(address -> modelMapper.map(address, AddressDTO.class))
@@ -85,7 +85,9 @@ public class AddressServiceImpl implements AddressService{
                 .orElseThrow(() -> new ResourceNotFoundException("Address", "addressId", addressId));
 
         User user = addressFromDatabase.getUser();
+
         user.getAddresses().removeIf(address -> address.getAddressId().equals(addressId));
+
         userRepository.save(user);
 
         addressRepository.delete(addressFromDatabase);

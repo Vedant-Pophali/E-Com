@@ -26,10 +26,10 @@ public class JwtUtils {
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
     @Value("${spring.app.jwtSecret}")
-    private String jwtSecret;
+    private String JWT_SECRET;
 
     @Value("${spring.app.jwtExpirationMs}")
-    private int jwtExpirationMs;
+    private int  JWT_EXPIRATION_MS;
 
     @Value("${spring.ecom.app.jwtCookieName}")
     private String jwtCookie;
@@ -64,7 +64,7 @@ public class JwtUtils {
         return Jwts.builder()
                 .subject(username)
                 .issuedAt(new Date())
-                .expiration(new Date((new Date()).getTime() + jwtExpirationMs))
+                .expiration(new Date((new Date()).getTime() + JWT_EXPIRATION_MS))
                 .signWith(key())
                 .compact();
     }
@@ -77,7 +77,7 @@ public class JwtUtils {
     }
 
     private Key key() {
-        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
+        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(JWT_SECRET));
     }
 
     public boolean validateJwtToken(String authToken) {
